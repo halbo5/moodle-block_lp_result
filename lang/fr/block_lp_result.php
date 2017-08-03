@@ -1,0 +1,22 @@
+<?php
+$string['pluginname'] = 'Résultat Plan de Formation';
+$string['lp_result'] = 'Résultat Plan de Formation';
+$string['lp_result:addinstance'] = 'Ajouter un nouveau bloc Résultat Plan de Formation';
+$string['lp_result:myaddinstance'] = 'Ajouter un nouveau bloc Résultat Plan de Formation au tableau de bord';
+$string['ctid'] = 'Id du modèle de plan de formation';
+$string['blocktitle'] = 'Titre du bloc';
+$string['defaulttitle'] = 'Résultat du plan de formation';
+$string['text'] = 'Télécharger le fichier pour le modèle de plan de formation n°';
+$string['textnotconfigured'] = 'Veuillez éditer les paramètres de ce bloc ...';
+$string['download'] = 'Choisir un format de fichier';
+$string['noaccess'] = 'Vous n\'avez pas la permission de voir ce bloc';
+$string['lp_result:view'] = 'Voir le bloc lp_result';
+$string['lastname'] = 'Nom';
+$string['firstname'] = 'Prénom';
+$string['idnumber'] = 'Numéro étudiant';
+$string['codeetape'] = 'Code Etape';
+$string['planname'] = 'Plan de formation';
+$string['viewtable'] = 'Voir les résultats';
+$string['scaleid'] = 'Validé si';
+$string['scaleidtext'] = 'Les compétences sont validées si la valeur est supérieure ou égale à';
+$string['lp'] = 'Plan de formation';

@@ -1,0 +1,61 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Table.
+
+    Classes required for JS:
+    * None
+
+    Data attibutes required for JS:
+    * None
+
+    Context variables required for this template:
+    * scaleid
+    * fields
+    * fields.value
+    * rows
+    * row
+    * row.validated
+    * row.value
+}}
+<div class="card card-inverse card-info mb-3 text-center">
+<div class="card-block">
+<blockquote class="card-blockquote">
+<h6>{{#str}}scaleidtext,block_lp_result{{/str}} {{scaleid}}</h6>
+</blockquote>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table table-condensed table-striped text-center">
+<thead>
+<tr>
+{{#fields}}
+<th class="text-center">{{value}}</th>
+{{/fields}}
+</tr>
+</thead>
+<tbody>
+{{#rows}}
+<tr>
+{{#row}}
+<td class="{{validated}}">{{value}}</td>
+{{/row}}
+</tr>
+{{/rows}}
+</tbody>
+</table>
+</div>

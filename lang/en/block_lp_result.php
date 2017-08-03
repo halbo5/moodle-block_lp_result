@@ -1,0 +1,22 @@
+<?php
+$string['pluginname'] = 'Learning plan result';
+$string['lp_result'] = 'Learning plan result';
+$string['lp_result:addinstance'] = 'Add a new Learning Plan Result block';
+$string['lp_result:myaddinstance'] = 'Add a new Learning Plan Result block to the My Moodle page';
+$string['ctid'] = 'Learning Plan Model ID';
+$string['blocktitle'] = 'Block title';
+$string['defaulttitle'] = 'Learning Plan Result';
+$string['text'] = 'Download file for Learning Plan Model N°';
+$string['textnotconfigured'] = 'Please, edit this block parameters ...';
+$string['download'] = 'Choose a file format';
+$string['noaccess'] = 'You d\'ont have the permission to view this block';
+$string['lp_result:view'] = 'View lp_result block';
+$string['lastname'] = 'Last Name';
+$string['firstname'] = 'First Name';
+$string['idnumber'] = 'Student ID number';
+$string['codeetape'] = 'Department';
+$string['planname'] = 'Learning Plan';
+$string['viewtable'] = 'View results';
+$string['scaleid'] = 'Validated if';
+$string['scaleidtext'] = 'Competencies are validated if value is bigger or equal then';
+$string['lp'] = 'Learning plan';
