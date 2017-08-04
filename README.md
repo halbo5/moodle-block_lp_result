@@ -1,7 +1,7 @@
 moodle-block_lp_result
 ============================
 
-[![Build Status](https://travis-ci.org/halbo5/moodle-local_lp_result.svg?branch=master)](https://travis-ci.org/halbo5/moodle-local_lp_result)
+[![Build Status](https://travis-ci.org/halbo5/moodle-block_lp_result.svg?branch=master)](https://travis-ci.org/halbo5/moodle-block_lp_result)
 
 Moodle plugin to display in a table all the results for a learning plan. Each student that is in a given learning plan model is listed in one table's line with all the competencies status.
 
