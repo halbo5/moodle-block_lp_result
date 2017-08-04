@@ -32,21 +32,21 @@ require_login();
 
 $dataformat = optional_param('dataformat', '', PARAM_ALPHA);
 $ctid = optional_param('ctid', '', PARAM_INT);
-$lp_result = new block_lp_result_get();
+$lpresult = new block_lp_result_get();
 
 if ($dataformat && $ctid) {
-    $fields = array('lastname'     => get_string('lastname','block_lp_result'),
-                    'firstname'  => get_string('firstname','block_lp_result'),
-                    'idnumber'        => get_string('idnumber','block_lp_result'),
-                    'codeetape' => get_string('codeetape','block_lp_result'),
-                    'planname'  => get_string('planname','block_lp_result'),
-                    'scaleid'  => get_string('scaleid','block_lp_result')
+    $fields = array('lastname'     => get_string('lastname', 'block_lp_result'),
+                    'firstname'  => get_string('firstname', 'block_lp_result'),
+                    'idnumber'        => get_string('idnumber', 'block_lp_result'),
+                    'codeetape' => get_string('codeetape', 'block_lp_result'),
+                    'planname'  => get_string('planname', 'block_lp_result'),
+                    'scaleid'  => get_string('scaleid', 'block_lp_result')
                     );
 
     $filename = clean_filename(get_string('pluginname', 'block_lp_result'));
 
-    $result=$lp_result->get_lp_result($ctid);
-    $fields=$lp_result->get_fields($result, $fields);
-    $iterator=$lp_result->get_lp_result_per_user($result, $fields);
+    $result = $lpresult->get_lp_result($ctid);
+    $fields = $lpresult->get_fields($result, $fields);
+    $iterator = $lpresult->get_lp_result_per_user($result, $fields);
     download_as_dataformat($filename, $dataformat, $fields, $iterator);
 }

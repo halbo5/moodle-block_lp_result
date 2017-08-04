@@ -22,20 +22,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 class block_lp_result extends \block_base {
     public function init() {
         $this->title = get_string('lp_result', 'block_lp_result');
     }
     public function get_content() {
-        global $OUTPUT,$COURSE;
+        global $OUTPUT, $COURSE;
         $systemcontext = context_system::instance();
         if ($this->content !== null) {
             return $this->content;
         }
-        $this->content  =  new stdClass();
+        $this->content = new stdClass();
         if (! empty($this->config->ctid)) {
             if (!has_capability('moodle/competency:usercompetencyreview', $systemcontext)) {
-            $this->content->text = get_string('noaccess', 'block_lp_result');
+                $this->content->text = get_string('noaccess', 'block_lp_result');
             } else {
                 $ctid = $this->config->ctid;
                 $courseid = $COURSE->id;
@@ -46,8 +48,10 @@ class block_lp_result extends \block_base {
                 $tablelink = new moodle_url('/blocks/lp_result/table.php', array('ctid' => $ctid, 'courseid' => $courseid));
                 $this->content->text .= html_writer::end_tag('p');
                 $this->content->text .= html_writer::link($tablelink, get_string('viewtable', 'block_lp_result'));
-                $downloadurl = new moodle_url('/blocks/lp_result/download.php');
-                $this->content->text .= $OUTPUT->download_dataformat_selector(get_string('download', 'block_lp_result'), $downloadurl, 'dataformat', array('ctid' => $ctid));
+                $url = new moodle_url('/blocks/lp_result/download.php');
+                $string = get_string('download', 'block_lp_result');
+                $param = array('ctid' => $ctid);
+                $this->content->text .= $OUTPUT->download_dataformat_selector($string, $url, 'dataformat', $param);
             }
         } else {
             $this->content->text   = get_string('textnotconfigured', 'block_lp_result');

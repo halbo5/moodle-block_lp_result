@@ -31,6 +31,8 @@ use templatable;
 use renderer_base;
 use stdClass;
 
+require_once($CFG->dirroot . '/blocks/lp_result/locallib.php');
+
 class table implements \renderable, \templatable {
 
     public function __construct($fields, $iterator) {
@@ -39,38 +41,52 @@ class table implements \renderable, \templatable {
     }
 
     public function export_for_template(\renderer_base $output) {
+        global $data;
         // Get fields for thead, we don't want planname and scaleid.
-        foreach ($this->fields as $idfield => $field) {
-            if ($idfield != "planname" && $idfield != "scaleid") {
-                $data->fields[]=array('key' => $idfield,'value' => $field);
-            }
-        }
+        if (!isset($data)) $data = new StdClass();
+       $data->fields = $this->get_table_fields($this->fields);
         $i = 0;
         // Get values for table. We need planname and scaleid just one time and not for all users.
         // We create an array with one user per line and his grades for each competency.
-        foreach ($this->iterator as $userid => $user) {
-            $row = '';
-            foreach ($user as $idfield => $field) {
-                if ($idfield == 'planname') {
-                    $data->planname = $field;
-                } elseif ($idfield == 'scaleid') {
-                    $data->scaleid = $field;
-                } elseif ($idfield == 'lastname' or $idfield == 'firstname' or $idfield == "idnumber" or $idfield == 'codeetape') {
-                    $row[]=array('key' => $idfield, 'value' => $field);
-                } else {// For competencies, we add a value to know if competency is validated
-                    if ($field >= $data->scaleid) {
-                        $validated = "lp-success";
-                    } else {
-                        $validated = "lp-warning";
-                    }
-                    $row[]=array('key' => $idfield, 'value' => $field, 'validated' => $validated);
-                }
-            }
+        foreach ($this->iterator as $user) {
+            $row = $this->get_user_result($user, $data);
+            // Combine all users in one array;
             if (!isset($temp[$i])) $temp[$i] = new StdClass();
             $temp[$i]->row = $row;
             $i++;
         }
         $data->rows = $temp;
         return $data;
+    }
+
+    function get_user_result($user, $data) {
+        $row = '';
+        foreach ($user as $idfield => $field) {
+            if ($idfield == 'planname') {
+                    $data->planname = $field;
+            } else if ($idfield == 'scaleid') {
+                    $data->scaleid = $field;
+            } else if ($idfield == 'lastname' or $idfield == 'firstname' or $idfield == "idnumber" or $idfield == 'codeetape') {
+                    $row[] = array('key' => $idfield, 'value' => $field);
+            } else {
+                    // For competencies, we add a value to know if competency is validated.
+                    if ($field >= $data->scaleid) {
+                        $validated = "lp-success";
+                    } else {
+                        $validated = "lp-warning";
+                    }
+                    $row[]=array('key' => $idfield, 'value' => $field, 'validated' => $validated);
+            }
+        }
+        return $row;
+    }
+
+    function get_table_fields($fields) {
+         foreach ($fields as $idfield => $field) {
+            if ($idfield != "planname" && $idfield != "scaleid") {
+                $result[]=array('key' => $idfield,'value' => $field);
+            }
+        }
+        return  $result;
     }
 }

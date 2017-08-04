@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 class block_lp_result_edit_form extends block_edit_form {
 
     protected function specific_definition($mform) {
@@ -29,7 +31,7 @@ class block_lp_result_edit_form extends block_edit_form {
         // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
         $mform->addElement('text', 'config_title', get_string('blocktitle', 'block_lp_result'));
-        $mform->setDefault('config_title', get_string('defaulttitle', 'block_lp_result');
+        $mform->setDefault('config_title', get_string('defaulttitle', 'block_lp_result'));
         $mform->setType('config_title', PARAM_TEXT);
         // A sample string variable with a default value.
         $mform->addElement('text', 'config_ctid', get_string('ctid', 'block_lp_result'));

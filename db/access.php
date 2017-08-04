@@ -23,7 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-    $capabilities = array(
+$capabilities = array(
 
     'block/lp_result:myaddinstance' => array(
         'riskbitmask' => RISK_PERSONAL,
@@ -31,8 +31,8 @@ defined('MOODLE_INTERNAL') || die();
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
             'user' => CAP_ALLOW,
-        )
-    ),
+            )
+        ),
 
     'block/lp_result:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
@@ -41,14 +41,14 @@ defined('MOODLE_INTERNAL') || die();
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
             'teacher' => CAP_ALLOW,
-        )
-    ),
+            )
+        ),
     // Whether or not a user can see the block.
     'block/lp_result:view' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
             'user' => CAP_ALLOW
-        )
-    ),
-);
+            )
+        ),
+    );

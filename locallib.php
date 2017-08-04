@@ -22,69 +22,100 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 class block_lp_result_get {
-    function get_lp_result($ctid) {
+
+    /**
+    * Get the results in the database. 1 line per user and per competence.
+    */
+    public function get_lp_result($ctid) {
         global $DB;
-        $sql = "SELECT cu.id, ct.id as 'planid', u.idnumber as 'numero_etu', u.firstname as 'prenom', u.lastname as 'nom', u.department as 'codeetape', ct.shortname as 'plan_nom',
-        c.shortname as 'competence', c.idnumber as 'competence_id',
-        cu.grade as 'note',u.id as 'userid', cf.scaleid as 'scaleid'
-        from {competency_plan} as cp
-        join {competency_template} as ct on cp.templateid = ct.id
-        join {competency_usercomp} as cu on cp.userid = cu.userid
-        join {user} as u on cp.userid = u.id
-        join {competency} as c on cu.competencyid = c.id
-        join {competency_framework} as cf on cf.id = c.competencyframeworkid
-        where ct.id = ? order by u.idnumber, c.shortname asc";
+        $sql = "SELECT {competency_usercomp}.id as cuid,
+        {competency_template}.id as 'planid',
+        {user}.idnumber as 'idnumber',
+        {user}.firstname as 'firstname',
+        {user}.lastname as 'lastname',
+        {user}.department as 'codeetape',
+        {competency_template}.shortname as 'planname',
+        {competency}.shortname as 'competence',
+        {competency}.idnumber as 'competence_id',
+        {competency_usercomp}.grade as 'grade',
+        {user}.id as 'userid',
+        {competency_framework}.scaleid as 'scaleid'
+        from {competency_plan}
+        inner join {competency_template} on {competency_plan}.templateid = {competency_template}.id
+        inner join {competency_usercomp} on {competency_plan}.userid = {competency_usercomp}.userid
+        inner join {user} on {competency_plan}.userid = {user}.id
+        inner join {competency} on {competency_usercomp}.competencyid = {competency}.id
+        inner join {competency_framework} on {competency_framework}.id = {competency}.competencyframeworkid
+        where {competency_template}.id = ?
+        order by {user}.idnumber, {competency}.shortname asc";
         $result = $DB->get_records_sql($sql, array($ctid));
         return $result;
     }
 
-    function get_fields($result, $fields) {
+    /**
+    * Number of colums depends on how many competencies are in the learning plan.
+    * Get all columns titles
+    */
+    public function get_fields($result, $fields) {
         foreach ($result as $line) {
             $temp = str_replace('-', '_', $line->competence_id);
-            $competence_id = str_replace('.', '', $temp);
-            $fields[$competence_id] = $line->competence_id;
+            $competenceid = str_replace('.', '', $temp);
+            $fields[$competenceid] = $line->competence_id;
         }
         return $fields;
     }
 
-    function get_lp_result_per_user($result, $fields) {
+    /**
+    * Transform the results in a table with one line per user with all his competencies
+    */
+    public function get_lp_result_per_user($result, $fields) {
         foreach ($result as $line) {
-        // Define object.
-        if (!isset($iterator[$line->userid])) $iterator[$line->userid] = new stdClass();
-
-            //create empty object $iterator with all properties
-            foreach ($fields as $key => $value) {
-                if (!isset($iterator[$line->userid]->$key)) {
-                $iterator[$line->userid]->$key = '';
-                }
-            }
+            // Define object.
+            if (!isset($iterator[$line->userid])) $iterator[$line->userid] = $this->init_iterator($fields);
 
             // Fill arrays.
             if ($iterator[$line->userid]->lastname == '') {
-                $iterator[$line->userid]->lastname = $line->nom;
+                $iterator[$line->userid]->lastname = $line->lastname;
             }
             if ($iterator[$line->userid]->firstname == '')  {
-                $iterator[$line->userid]->firstname = $line->prenom;
+                $iterator[$line->userid]->firstname = $line->firstname;
             }
             if ($iterator[$line->userid]->idnumber == '') {
-                $iterator[$line->userid]->idnumber = $line->numero_etu;
+                $iterator[$line->userid]->idnumber = $line->idnumber;
             }
             if ($iterator[$line->userid]->codeetape == '') {
                 $iterator[$line->userid]->codeetape = $line->codeetape;
             }
             if ($iterator[$line->userid]->planname == '') {
-                $iterator[$line->userid]->planname = $line->plan_nom;
+                $iterator[$line->userid]->planname = $line->planname;
             }
             if ($iterator[$line->userid]->scaleid == '') {
                 $iterator[$line->userid]->scaleid = $line->scaleid;
             }
             $temp = str_replace('-', '_', $line->competence_id);
-            $competence_id = str_replace('.', '', $temp);
-            if ($iterator[$line->userid]->$competence_id == '') {
-                $iterator[$line->userid]->$competence_id = $line->note;
+            $competenceid = str_replace('.', '', $temp);
+            if ($iterator[$line->userid]->$competenceid == '') {
+                $iterator[$line->userid]->$competenceid = $line->grade;
             }
         }
         return $iterator;
+    }
+
+    /**
+    * Create an empty object with the name of the table columns
+    */
+    protected function init_iterator($fields) {
+
+        // Create empty object $iterator with all properties.
+        $object = new StdClass();
+        foreach ($fields as $key => $value) {
+            if (!isset($object->$key)) {
+                $object->$key = '';
+            }
+        }
+        return $object;
     }
 }
