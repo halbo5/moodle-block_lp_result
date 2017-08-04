@@ -26,9 +26,9 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_lp_result_get {
 
-    /**
-    * Get the results in the database. 1 line per user and per competence.
-    */
+     /**
+     * Get the results in the database. 1 line per user and per competence.
+     */
     public function get_lp_result($ctid) {
         global $DB;
         $sql = "SELECT {competency_usercomp}.id as cuid,
@@ -68,19 +68,21 @@ class block_lp_result_get {
         return $fields;
     }
 
-    /**
-    * Transform the results in a table with one line per user with all his competencies
-    */
+     /**
+     * Transform the results in a table with one line per user with all his competencies
+     */
     public function get_lp_result_per_user($result, $fields) {
         foreach ($result as $line) {
             // Define object.
-            if (!isset($iterator[$line->userid])) $iterator[$line->userid] = $this->init_iterator($fields);
+            if (!isset($iterator[$line->userid])) {
+                $iterator[$line->userid] = $this->init_iterator($fields);
+            }
 
             // Fill arrays.
             if ($iterator[$line->userid]->lastname == '') {
                 $iterator[$line->userid]->lastname = $line->lastname;
             }
-            if ($iterator[$line->userid]->firstname == '')  {
+            if ($iterator[$line->userid]->firstname == '') {
                 $iterator[$line->userid]->firstname = $line->firstname;
             }
             if ($iterator[$line->userid]->idnumber == '') {
@@ -104,9 +106,9 @@ class block_lp_result_get {
         return $iterator;
     }
 
-    /**
-    * Create an empty object with the name of the table columns
-    */
+     /**
+     * Create an empty object with the name of the table columns
+     */
     protected function init_iterator($fields) {
 
         // Create empty object $iterator with all properties.

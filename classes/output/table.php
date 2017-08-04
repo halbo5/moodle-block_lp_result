@@ -43,15 +43,19 @@ class table implements \renderable, \templatable {
     public function export_for_template(\renderer_base $output) {
         global $data;
         // Get fields for thead, we don't want planname and scaleid.
-        if (!isset($data)) $data = new StdClass();
-       $data->fields = $this->get_table_fields($this->fields);
+        if (!isset($data)) {
+            $data = new StdClass();
+        }
+        $data->fields = $this->get_table_fields($this->fields);
         $i = 0;
         // Get values for table. We need planname and scaleid just one time and not for all users.
         // We create an array with one user per line and his grades for each competency.
         foreach ($this->iterator as $user) {
             $row = $this->get_user_result($user, $data);
-            // Combine all users in one array;
-            if (!isset($temp[$i])) $temp[$i] = new StdClass();
+            // Combine all users in one array.
+            if (!isset($temp[$i])) {
+                $temp[$i] = new StdClass();
+            }
             $temp[$i]->row = $row;
             $i++;
         }
@@ -59,34 +63,34 @@ class table implements \renderable, \templatable {
         return $data;
     }
 
-    function get_user_result($user, $data) {
+    public function get_user_result($user, $data) {
         $row = '';
         foreach ($user as $idfield => $field) {
             if ($idfield == 'planname') {
-                    $data->planname = $field;
+                $data->planname = $field;
             } else if ($idfield == 'scaleid') {
-                    $data->scaleid = $field;
+                $data->scaleid = $field;
             } else if ($idfield == 'lastname' or $idfield == 'firstname' or $idfield == "idnumber" or $idfield == 'codeetape') {
-                    $row[] = array('key' => $idfield, 'value' => $field);
+                $row[] = array('key' => $idfield, 'value' => $field);
             } else {
                     // For competencies, we add a value to know if competency is validated.
-                    if ($field >= $data->scaleid) {
-                        $validated = "lp-success";
-                    } else {
-                        $validated = "lp-warning";
-                    }
-                    $row[]=array('key' => $idfield, 'value' => $field, 'validated' => $validated);
+                if ($field >= $data->scaleid) {
+                    $validated = "lp-success";
+                } else {
+                    $validated = "lp-warning";
+                }
+                $row[] = array('key' => $idfield, 'value' => $field, 'validated' => $validated);
             }
         }
         return $row;
     }
 
-    function get_table_fields($fields) {
-         foreach ($fields as $idfield => $field) {
-            if ($idfield != "planname" && $idfield != "scaleid") {
-                $result[]=array('key' => $idfield,'value' => $field);
-            }
+    public function get_table_fields($fields) {
+       foreach ($fields as $idfield => $field) {
+        if ($idfield != "planname" && $idfield != "scaleid") {
+            $result[] = array('key' => $idfield, 'value' => $field);
         }
-        return  $result;
     }
+    return  $result;
+}
 }
