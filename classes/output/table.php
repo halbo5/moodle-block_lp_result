@@ -91,6 +91,6 @@ class table implements \renderable, \templatable {
                 $result[] = array('key' => $idfield, 'value' => $field);
             }
         }
-    return  $result;
+        return  $result;
     }
 }
