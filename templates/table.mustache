@@ -30,7 +30,19 @@
     * rows
     * row
     * row.validated
-    * row.value
+
+    Example context (json):
+    {
+        "scaleid": 3,
+        "fields": [
+            { "value": "something" }
+        ],
+        "rows" : [
+            {"row": [
+                {"validated": "lp_success"}
+            ]}
+        ]
+    }
 }}
 <div class="card card-inverse card-info mb-3 text-center">
 <div class="card-block">
@@ -42,11 +54,7 @@
 <div class="table-responsive">
 <table class="table table-condensed table-striped text-center">
 <thead>
-<tr>
-{{#fields}}
-<th class="text-center">{{value}}</th>
-{{/fields}}
-</tr>
+<tr>{{#fields}}<th class="text-center">{{value}}</th>{{/fields}}</tr>
 </thead>
 <tbody>
 {{#rows}}
