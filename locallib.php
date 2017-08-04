@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_lp_result_get {
 
-     /**
-     * Get the results in the database. 1 line per user and per competence.
+    /**
+     *   Get the results in the database. 1 line per user and per competence.
      */
     public function get_lp_result($ctid) {
         global $DB;
@@ -56,9 +56,9 @@ class block_lp_result_get {
     }
 
     /**
-    * Number of colums depends on how many competencies are in the learning plan.
-    * Get all columns titles
-    */
+     * Number of colums depends on how many competencies are in the learning plan.
+     * Get all columns titles
+     */
     public function get_fields($result, $fields) {
         foreach ($result as $line) {
             $temp = str_replace('-', '_', $line->competence_id);
@@ -69,8 +69,8 @@ class block_lp_result_get {
     }
 
      /**
-     * Transform the results in a table with one line per user with all his competencies
-     */
+      * Transform the results in a table with one line per user with all his competencies
+      */
     public function get_lp_result_per_user($result, $fields) {
         foreach ($result as $line) {
             // Define object.
@@ -107,8 +107,8 @@ class block_lp_result_get {
     }
 
      /**
-     * Create an empty object with the name of the table columns
-     */
+      * Create an empty object with the name of the table columns
+      */
     protected function init_iterator($fields) {
 
         // Create empty object $iterator with all properties.

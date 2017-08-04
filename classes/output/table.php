@@ -86,11 +86,11 @@ class table implements \renderable, \templatable {
     }
 
     public function get_table_fields($fields) {
-       foreach ($fields as $idfield => $field) {
-        if ($idfield != "planname" && $idfield != "scaleid") {
-            $result[] = array('key' => $idfield, 'value' => $field);
+        foreach ($fields as $idfield => $field) {
+            if ($idfield != "planname" && $idfield != "scaleid") {
+                $result[] = array('key' => $idfield, 'value' => $field);
+            }
         }
-    }
     return  $result;
-}
+    }
 }
