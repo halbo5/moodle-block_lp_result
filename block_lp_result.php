@@ -29,20 +29,27 @@ class block_lp_result extends \block_base {
         $this->title = get_string('lp_result', 'block_lp_result');
     }
     public function get_content() {
-        global $OUTPUT, $COURSE;
+        global $OUTPUT, $COURSE, $USER, $DB;
         $systemcontext = context_system::instance();
+         $usercontext = context_user::instance($USER->id);
+          $categorycontext = context_coursecat::instance($COURSE->category);
+          $coursecontext = context_course::instance($COURSE->id);
         if ($this->content !== null) {
             return $this->content;
         }
         $this->content = new stdClass();
         if (! empty($this->config->ctid)) {
-            if (!has_capability('moodle/competency:usercompetencyreview', $systemcontext)) {
+            if (!has_capability('moodle/competency:competencygrade', $coursecontext)) {
                 $this->content->text = get_string('noaccess', 'block_lp_result');
             } else {
                 $ctid = $this->config->ctid;
+                $sql = "SELECT {competency_template}.shortname as 'planname'
+                    from {competency_template}
+                    where {competency_template}.id = ?";
+                $planname = $DB->get_record_sql($sql,array($ctid));
                 $courseid = $COURSE->id;
                 $this->content->text  = html_writer::start_tag('p');
-                $this->content->text .= get_string('text', 'block_lp_result').' '.$ctid;
+                $this->content->text .= get_string('text', 'block_lp_result').' '.$planname->planname;
                 $this->content->text .= html_writer::end_tag('p');
                 $this->content->text .= html_writer::start_tag('p');
                 $tablelink = new moodle_url('/blocks/lp_result/table.php', array('ctid' => $ctid, 'courseid' => $courseid));
@@ -52,6 +59,11 @@ class block_lp_result extends \block_base {
                 $string = get_string('download', 'block_lp_result');
                 $param = array('ctid' => $ctid);
                 $this->content->text .= $OUTPUT->download_dataformat_selector($string, $url, 'dataformat', $param);
+                $this->content->text .= html_writer::start_tag('p');
+                $competencyreportlink = new moodle_url('/report/competency/index.php', array('id' => $courseid));
+                $this->content->text .= html_writer::end_tag('p');
+                $this->content->text .= html_writer::link($competencyreportlink, get_string('competencyreport', 'block_lp_result'));
+
             }
         } else {
             $this->content->text   = get_string('textnotconfigured', 'block_lp_result');
@@ -76,4 +88,13 @@ class block_lp_result extends \block_base {
         $attributes['class'] .= ' block_'. $this->name();
         return $attributes;
     }
+
+    public function applicable_formats() {
+  return array(
+           'site-index' => false,
+          'course-view' => true, 
+                  'mod' => false, 
+             'mod-quiz' => false
+  );
+}
 }

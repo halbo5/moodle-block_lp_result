@@ -50,21 +50,26 @@ class table implements \renderable, \templatable {
         $i = 0;
         // Get values for table. We need planname and scaleid just one time and not for all users.
         // We create an array with one user per line and his grades for each competency.
-        foreach ($this->iterator as $user) {
-            $row = $this->get_user_result($user, $data);
-            // Combine all users in one array.
-            if (!isset($temp[$i])) {
-                $temp[$i] = new StdClass();
+        if ($this->iterator != false){
+            foreach ($this->iterator as $user) {
+                $row = $this->get_user_result($user, $data);
+                // Combine all users in one array.
+                if (!isset($temp[$i])) {
+                    $temp[$i] = new StdClass();
+                }
+                $temp[$i]->row = $row;
+                $i++;
             }
-            $temp[$i]->row = $row;
-            $i++;
+        }
+        else {
+            $temp = "";
         }
         $data->rows = $temp;
         return $data;
     }
 
     public function get_user_result($user, $data) {
-        $row = '';
+        $row = array();
         foreach ($user as $idfield => $field) {
             if ($idfield == 'planname') {
                 $data->planname = $field;

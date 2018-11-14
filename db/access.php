@@ -35,12 +35,11 @@ $capabilities = array(
         ),
 
     'block/lp_result:addinstance' => array(
-        'riskbitmask' => RISK_SPAM | RISK_XSS,
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
-            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
             )
         ),
     // Whether or not a user can see the block.
@@ -48,7 +47,7 @@ $capabilities = array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
-            'user' => CAP_ALLOW
+            'editingteacher' => CAP_ALLOW
             )
         ),
     );

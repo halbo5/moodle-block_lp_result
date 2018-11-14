@@ -42,7 +42,7 @@ class block_lp_result_get {
         {competency}.idnumber as 'competence_id',
         {competency_usercomp}.grade as 'grade',
         {user}.id as 'userid',
-        {competency_framework}.scaleid as 'scaleid'
+        {competency_framework}.scaleconfiguration as 'scaleconfiguration'
         from {competency_plan}
         inner join {competency_template} on {competency_plan}.templateid = {competency_template}.id
         inner join {competency_usercomp} on {competency_plan}.userid = {competency_usercomp}.userid
@@ -94,8 +94,11 @@ class block_lp_result_get {
             if ($iterator[$line->userid]->planname == '') {
                 $iterator[$line->userid]->planname = $line->planname;
             }
+            $scaletable = explode("},",$line->scaleconfiguration);
+            $scaleconfiguration = json_decode($scaletable[1]."}");
+            $scaleid = $scaleconfiguration->id;
             if ($iterator[$line->userid]->scaleid == '') {
-                $iterator[$line->userid]->scaleid = $line->scaleid;
+                $iterator[$line->userid]->scaleid = $scaleid;
             }
             $temp = str_replace('-', '_', $line->competence_id);
             $competenceid = str_replace('.', '', $temp);

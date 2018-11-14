@@ -64,7 +64,10 @@ $fields = array('lastname'     => get_string('lastname', 'block_lp_result'),
                     'scaleid'  => get_string('scaleid', 'block_lp_result'));
 $results = $lpresult->get_lp_result($ctid);
 $ligne = each($results);
-$planname = $ligne[1]->planname;
+if ($ligne[1]) {
+    $planname = $ligne[1]->planname;
+}
+else {$planname = "Pas de résultats pour le moment ...";}
 $title = get_string('lp', 'block_lp_result').' : '.$planname;
 $fields = $lpresult->get_fields($results, $fields);
 $iterator = $lpresult->get_lp_result_per_user($results, $fields);

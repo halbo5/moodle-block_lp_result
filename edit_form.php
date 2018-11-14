@@ -27,15 +27,37 @@ defined('MOODLE_INTERNAL') || die();
 class block_lp_result_edit_form extends block_edit_form {
 
     protected function specific_definition($mform) {
+    	global $DB;
 
         // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
         $mform->addElement('text', 'config_title', get_string('blocktitle', 'block_lp_result'));
         $mform->setDefault('config_title', get_string('defaulttitle', 'block_lp_result'));
         $mform->setType('config_title', PARAM_TEXT);
-        // A sample string variable with a default value.
+        /* A sample string variable with a default value.
         $mform->addElement('text', 'config_ctid', get_string('ctid', 'block_lp_result'));
         $mform->setDefault('config_ctid', '1');
-        $mform->setType('config_ctid', PARAM_RAW);
+        $mform->setType('config_ctid', PARAM_RAW);*/
+
+        //template plan to display
+        $sql = "SELECT {competency_template}.id as 'templateid',
+        	{competency_template}.shortname as 'planname'
+			from {competency_template}
+			group by {competency_template}.id";
+        $plans = $DB->get_records_sql_menu($sql);
+        $keys = array_keys($plans);
+        core_collator::asort($plans);
+
+        if (empty($plans)) {
+            $mform->addElement('static', 'noplanswarning', get_string('noplanswarning', 'block_lp_result'),
+                    get_string('noplanswarning', 'block_lp_result'));
+        } else {
+            foreach ($plans as $id => $name) {
+                $plans[$id] = strip_tags(format_string($name));
+            }
+            $mform->addElement('select', 'config_ctid',
+                    get_string('config_select_plan', 'block_lp_result'), $plans);
+            $mform->setDefault('config_ctid',$keys[0]);
+        }
     }
 }

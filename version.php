@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_lp_result';
-$plugin->version = 2017072906;
-$plugin->release = 'v0.1';
+$plugin->version = 2018111401;
+$plugin->release = 'v0.3';
 $plugin->requires = 2016120500;
 $plugin->maturity = MATURITY_STABLE;
